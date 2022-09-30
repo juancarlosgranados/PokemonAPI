@@ -2,24 +2,25 @@ package com.example.pokemonapi;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class pokemonapi {
-    void get pokemons (){
-        String url="";
-       String result;
-        result = httpUtils.get(url);
-        JSONObject jsonresult = new JSONObject(result);
-        jsonresult.getJSONArray("results");
-        Log.e("  POKEMON ");
+    String url = "https://pokeapi.co/docs/v2";
+    String result;
 
-        for (int i = 0; i < ; i++) {
-            JSONObject pokemonJson = result.getJASONObject(i);
-        pokemon Pokemon = new pokemon();
-        Pokemon.setName(pokemonJson.getString("name"));
-        Pokemon.setDtailsURL(pokemonJson.getString("url"));
-
-        pokemons.add(Pokemon)
+    {
+        try {
+            result = httpUtils.get(url);
+JSONObject jsonResult = new JSONObject(result);
+            JSONArray results = jsonResult.getJSONArray("result");
+    ArrayList
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
 }

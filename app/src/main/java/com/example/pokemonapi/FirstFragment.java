@@ -1,6 +1,7 @@
 package com.example.pokemonapi;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.pokemonapi.databinding.FragmentFirstBinding;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class FirstFragment extends Fragment {
@@ -21,9 +23,11 @@ public class FirstFragment extends Fragment {
 
     ArrayList<String> items = new ArrayList<>();
 
-    items.add("jinx");
-    items.add("zamazenta");
-    items.add("garbodor");
+    ArrayList<String> pokemones = new ArrayList<>();
+
+     //items.add("jinx");
+    // items.add("zamazenta");
+   // items.add("garbodor")
 
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(
         getContext(),
@@ -32,7 +36,7 @@ public class FirstFragment extends Fragment {
             items
     );
 
-    Pokemon
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -43,7 +47,7 @@ public class FirstFragment extends Fragment {
         return binding.getRoot();
 
     }
-Executors.
+
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -54,6 +58,17 @@ Executors.
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
             }
         });
+    }
+    void refresh() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        executor.execute(() -> {
+            // Aquest codi s'executa en segon pla
+            pokemonapi api = new pokemonapi();
+            String result = api.getpokemons();
+
+            Log.d("DEBUG", result);
+        }
     }
 
     @Override
