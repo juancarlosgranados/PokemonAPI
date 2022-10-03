@@ -65,7 +65,7 @@ public class FirstFragment extends Fragment {
         executor.execute(() -> {
             // Aquest codi s'executa en segon pla
             pokemonapi api = new pokemonapi();
-            String result = api.getpokemons();
+            String result = api.getpokemon();
 
             Log.d("DEBUG", result);
         }
