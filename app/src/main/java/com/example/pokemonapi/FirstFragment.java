@@ -1,7 +1,8 @@
 package com.example.pokemonapi;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,26 +18,10 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class FirstFragment extends Fragment {
+public class  FirstFragment extends Fragment {
 
     private FragmentFirstBinding binding;
-
-    ArrayList<String> items = new ArrayList<>();
-
-    ArrayList<String> pokemones = new ArrayList<>();
-
-     //items.add("jinx");
-    // items.add("zamazenta");
-   // items.add("garbodor")
-
-    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-        getContext(),
-            R.layout.pokemon_row,
-            R.id.idrow,
-            items
-    );
-
-
+    private ArrayAdapter adapter;
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -51,24 +36,21 @@ public class FirstFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
-            }
-        });
-    }
-    void refresh() {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
 
-        executor.execute(() -> {
-            // Aquest codi s'executa en segon pla
-            pokemonapi api = new pokemonapi();
-            String result = api.getpokemon();
+        ArrayList<String> items = new ArrayList<>();
 
-            Log.d("DEBUG", result);
-        }
+
+        adapter = new ArrayAdapter<String>(
+                getContext(),
+                R.layout.pokemon_row,
+                R.id.idrow,
+                items
+
+        );
+        binding.pokemon_row.setAdapter(adapter);
+
+        refresh();
+
     }
 
     @Override
@@ -77,4 +59,21 @@ public class FirstFragment extends Fragment {
         binding = null;
     }
 
-}
+    private void refresh(){
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        executor.execute(()->{
+            PokemonApi api = new PokemonApi();
+            ArrayList<Pokemon> pokemons = api.getPokemons();
+
+            handler.post(() -> {
+                // Aquest codi s'executa en primer pla.
+                adapter.clear();
+                adapter.addAll(pokemons);
+
+
+            });
+        });
+
+
+    }}
