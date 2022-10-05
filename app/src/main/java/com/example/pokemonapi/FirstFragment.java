@@ -43,11 +43,12 @@ public class  FirstFragment extends Fragment {
         adapter = new ArrayAdapter<String>(
                 getContext(),
                 R.layout.pokemon_row,
-                R.id.idrow,
+                R.id.textid,
                 items
 
         );
-        binding.pokemon_row.setAdapter(adapter);
+
+        binding.lvPokemons.setAdapter(adapter);
 
         refresh();
 
@@ -63,13 +64,14 @@ public class  FirstFragment extends Fragment {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(()->{
-            PokemonApi api = new PokemonApi();
-            ArrayList<Pokemon> pokemons = api.getPokemons();
+            pokemonapi api = new pokemonapi();
+            ArrayList<pokemon> pokemons = api.getPokemons();
 
             handler.post(() -> {
                 // Aquest codi s'executa en primer pla.
                 adapter.clear();
                 adapter.addAll(pokemons);
+
 
 
             });
